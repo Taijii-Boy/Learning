@@ -14,9 +14,9 @@ def get_values():
         x, y = map(int, input().split())
         return x, y
 
-    except ValueError as z: 
+    except ValueError as z:
         print(z)
-        return (0, 0)
+        return 0, 0
     finally:
         print('Блок finally выполняется до return')
 
