@@ -2,7 +2,6 @@
 ваши попытки угадать игра выдает одну из трех подсказок: Pico, если вы угадали правильную цифру на неправильном месте,
 Fermi, если в вашей догадке есть правильная цифра на правильном месте, и Bagels, если в догадке не содержится
 правильных цифр. На угадывание секретного числа у вас десять попыток. """
-
 import random
 
 
@@ -36,6 +35,7 @@ def get_secret_number(length: str) -> str:
     secret_number = ''
     for i in range(int(length)):
         secret_number += digits[i]
+    # print(f'{secret_number=}')
     return secret_number
 
 
@@ -44,8 +44,17 @@ def show_number_guess(max_gues: str):
     У тебя есть {max_gues} попыток, чтобы отгадать. Удачи! ''')
 
 
-def get_clue(number: str):
-    pass
+def get_clue(digit: str, secr_number: str) -> str:
+    clues = []
+    for i in range(len(digit)):
+        if digit[i] == secr_number[i]:
+            clues.append("Fermi")
+        elif digit[i] in secr_number:
+            clues.append("Pico")
+    if len(clues) == 0:
+        return 'Bagels'
+    clues.sort()
+    return ' '.join(clues)
 
 
 def repeat_game() -> bool:
@@ -54,17 +63,25 @@ def repeat_game() -> bool:
     return answer in ['y', 'yes', 'д', 'да']
 
 
-def try_guess(guess: int, secret_num: str):
-    print(f'Попытка № {guess}. Введите число:')
-    answer_num = check_input(input())
-    if answer_num == secret_num:
+def try_guess(guess: int, digit_length: str):
+    while True:
+        print(f'Попытка № {guess}. Введите число:')
+        answer = input()
+        if len(answer) != int(digit_length) or not answer.isdigit():
+            print(f"Число должно состоять из {digit_length} цифр")
+        else:
+            return answer
+
+
+def check_number(num: str, secret_num: str) -> bool:
+    if num == secret_num:
         print('Поздравляю! Ты угадал!')
-    else:
-        print('Не угадал!')
+        return True
+    return False
 
 
 if __name__ == '__main__':
-    current_guess = 1
+
     continue_game_flag = True
 
     digit_length, max_guesses = config_game()
@@ -72,14 +89,19 @@ if __name__ == '__main__':
     show_number_guess(max_guesses)
 
     while continue_game_flag:
-        number = get_secret_number(digit_length)
-        while current_guess <= int(max_guesses):
-            try_guess(current_guess, number)
+        current_guess = 1
+        secret_number = get_secret_number(digit_length)
+        while True:
+            input_number = try_guess(current_guess, digit_length)
             current_guess += 1
+            if check_number(input_number, secret_number):
+                break
 
-        print('К сожалению, вы проиграли!')
+            if current_guess > int(max_guesses):
+                print(f'К сожалению, вы проиграли! Правильный ответ: {secret_number}')
+                break
+
+            print(get_clue(input_number, secret_number))
+
         continue_game_flag = repeat_game()
         current_guess = 1
-
-
-
