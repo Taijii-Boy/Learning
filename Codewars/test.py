@@ -1,50 +1,25 @@
-def decode_morse(morse_code):
-    morse = {'.-': 'A',
-             '-...': 'B',
-             '-.-.': 'C',
-             '-..': 'D',
-             '.': 'E',
-             '..-.': 'F',
-             '--.': 'G',
-             '....': 'H',
-             '..': 'I',
-             '.---': 'J',
-             '-.-': 'K',
-             '.-..': 'L',
-             '--': 'M',
-             '-.': 'N',
-             '---': 'O',
-             '.--.': 'P',
-             '--.-': 'Q',
-             '.-.': 'R',
-             '...': 'S',
-             '-': 'T',
-             '..-': 'U',
-             '...-': 'V',
-             '.--': 'W',
-             '-..-': 'X',
-             '-.--': 'Y',
-             '--..': 'Z',
-             '.----': '1',
-             '..---': '2',
-             '...--': '3',
-             '....-': '4',
-             '.....': '5',
-             '-....': '6',
-             '--...': '7',
-             '---..': '8',
-             '----.': '9',
-             '-----': '0',
-             }
+# def unique_in_order(iterable):
+#     my_list = []
+#     for i in range(1, len(iterable)):
+#         if iterable[i] != iterable[i - 1]:
+#             my_list.append(iterable[i - 1])
+#     my_list.append(iterable[-1])
+#     return my_list
 
-    words = morse_code.split('   ')
-    word_by_letters = [letters.split() for letters in words]
-    text = ''
-    for letters in word_by_letters:
-        for letter in letters:
-            text += ''.join(morse[letter])
-        text += ' '
-    return text
+def unique_in_order(iterable):
+    last_char = ''
+    my_list = []
+    for letter in iterable:
+        if str(letter) != last_char:
+            last_char = str(letter)
+            my_list.append(letter)
+    return my_list
 
 
-print(decode_morse('.... . -.--   .--- ..- -.. .'))
+print(unique_in_order('AAAABBBCCDAABBB'))
+
+
+if __name__ == '__main__':
+    assert unique_in_order('AAAABBBCCDAABBB') == ['A', 'B', 'C', 'D', 'A', 'B']
+    assert unique_in_order('ABBCcAD') == ['A', 'B', 'C', 'c', 'A', 'D']
+    assert unique_in_order([1, 2, 2, 3, 3]) == [1, 2, 3]
