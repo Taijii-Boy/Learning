@@ -43,9 +43,9 @@ full = 100
 # print(f'{min(big_number, pi)}')
 
 # Форматирование времени
-# print(today, '- не читабельно')
-# print(f'{today:%d-%m-%y %H:%M}')
-# print(f'{today:%d.%m.%y, %H:%M:%S}')
+print(today, '- не читабельно')
+print(f'{today:%d-%m-%y %H:%M}')
+print(f'{today:%d.%m.%y, %H:%M:%S}')
 
 # Считаем проценты
 # print(f'{real/full:%}')
