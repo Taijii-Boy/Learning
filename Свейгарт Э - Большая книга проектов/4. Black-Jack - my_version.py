@@ -100,6 +100,7 @@ def get_game_score(dealer_hand: list, player_hand: list) -> tuple:
 
 
 def check_score(dealer_score: int, player_score: int, game_continue: bool = True) -> str:
+
     if (dealer_score == 21 and dealer_score != player_score) or (
             not game_continue and (21 < dealer_score < player_score)):
         return 'dealer_win'
@@ -109,7 +110,9 @@ def check_score(dealer_score: int, player_score: int, game_continue: bool = True
     return 'continue'
 
 
-def show_game_table(dealer_hand: list, dealer_score: int, player_hand: list, player_score: int, backside: bool):
+def show_game_table(dealer_hand: list, dealer_score: int, player_hand: list, player_score: int, money: int,
+                    backside: bool):
+    print(f"\nYour money: {money}")
     if backside:
         print('\nDEALER: ???')
     else:
@@ -119,25 +122,60 @@ def show_game_table(dealer_hand: list, dealer_score: int, player_hand: list, pla
     show_cards(player_hand)
 
 
+def choose_move(first_round: bool = False):
+    while True:
+        if first_round:
+            print("\n(H)it, (S)tand, (D)ouble")
+            choice = input("> ").upper()
+        else:
+            print("\n(H)it, (S)tand")
+            choice = input("> ").upper()
+        if choice in 'HSD':
+            return choice
+
+
 def main():
     money = 5000
     max_bet = money
-    player_hand = []
     dealer_hand = []
+    player_hand = []
+    player_chose = ''
+    dealer_score = player_score = 0
 
     game_continue = True
+    game_round = True
 
     config_game(money)
     while game_continue:
+        first_round = True
         deck = create_deck()
-        bet = get_bet(max_bet)
-        money -= bet
-        deck, dealer_hand = get_dealer_cards(deck, dealer_hand, 2)  # TODO сделать что-то с количеством карт
+        deck, dealer_hand = get_dealer_cards(deck, dealer_hand, 2)
         deck, player_hand = get_player_cards(deck, player_hand, 2)
-        dealer_score, player_score = get_game_score(dealer_hand, player_hand)
-        result = check_score(dealer_score, player_score)
-        backside = True if result not in ('player_win', 'dealer_win') else False  # TODO исправить отображение карты
-        show_game_table(dealer_hand, dealer_score, player_hand, player_score, backside)
+
+        while game_round:
+            bet = get_bet(max_bet)
+            money -= bet
+
+            if player_chose == 'H':
+                deck, player_hand = get_player_cards(deck, player_hand)
+                print(f'You draw {player_hand[-1][0]} of {player_hand[-1][1]}')  # You draw card.name of card.suite
+            elif player_chose == 'S':
+                pass
+            elif player_chose == 'D':
+                deck, player_hand = get_player_cards(deck, player_hand)
+                print(f'You draw {player_hand[-1][0]} of {player_hand[-1][1]}')
+                money -= bet
+
+            if dealer_score < 17:
+                deck, dealer_hand = get_dealer_cards(deck, dealer_hand)
+
+            dealer_score, player_score = get_game_score(dealer_hand, player_hand)
+            result = check_score(dealer_score, player_score)
+            backside = True if result not in ('player_win', 'dealer_win') else False  # TODO исправить отображение карты
+            show_game_table(dealer_hand, dealer_score, player_hand, player_score, money, backside)
+            player_chose = choose_move(first_round)
+            first_round = False
+
 
     # show_cards(player_hand, False)
 
