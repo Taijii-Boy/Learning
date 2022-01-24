@@ -61,12 +61,6 @@ def get_player_cards(deck, player_hand: list, cards_count=1) -> tuple:
     return deck, player_hand
 
 
-def get_dealer_cards(deck, dealer_hand: list, cards_count=1) -> tuple:
-    for count in range(cards_count):
-        dealer_hand.append(deck.pop())
-    return deck, dealer_hand
-
-
 def get_bet(max_bet: int) -> int:
     while True:
         print(f'How much do you bet? (1-{max_bet}, or QUIT)')
@@ -99,13 +93,11 @@ def get_game_score(dealer_hand: list, player_hand: list) -> tuple:
     return score_list[0], score_list[1]  # (dealer_score, player_score)
 
 
-def check_score(dealer_score: int, player_score: int, game_continue: bool = True) -> str:
+def check_score(dealer_score: int, player_score: int) -> str:
 
-    if (dealer_score == 21 and dealer_score != player_score) or (
-            not game_continue and (21 < dealer_score < player_score)):
+    if (dealer_score == 21 and dealer_score != player_score) or player_score > 21:
         return 'dealer_win'
-    elif (player_score == 21 and player_score != dealer_score) or (
-            not game_continue and (21 < player_score < dealer_score)):
+    elif (player_score == 21 and player_score != dealer_score) or dealer_score > 21:
         return 'player_win'
     return 'continue'
 
@@ -134,22 +126,44 @@ def choose_move(first_round: bool = False):
             return choice
 
 
+def print_result(result: str) -> bool:
+    if result == 'player_win':
+        print(f"\n{'-' * 20}")
+        print('Congratulate! You win!')
+        print(f"{'-' * 20}")
+        return True
+    elif result == 'dealer_win':
+        print(f"\n{'-'*20}")
+        print('Game over! Dealer win!')
+        print(f"{'-' * 20}")
+        return True
+    return False
+
+
+def want_to_continue() -> bool:
+    while True:
+        print('Do you want to continue? y or n')
+        answer = input('> ')
+        return True if 'y' in answer.lower() else False
+
+
 def main():
     money = 5000
     max_bet = money
-    dealer_hand = []
-    player_hand = []
     player_chose = ''
-    dealer_score = player_score = 0
-
-    game_continue = True
+    dealer_score = 0
     game_round = True
+    game_continue = True
 
     config_game(money)
-    while game_continue:
+    while game_continue and money > 0:
+        backside = True
+        dealer_hand = []
+        player_hand = []
         first_round = True
+
         deck = create_deck()
-        deck, dealer_hand = get_dealer_cards(deck, dealer_hand, 2)
+        deck, dealer_hand = get_player_cards(deck, dealer_hand, 2)
         deck, player_hand = get_player_cards(deck, player_hand, 2)
 
         while game_round:
@@ -160,24 +174,25 @@ def main():
                 deck, player_hand = get_player_cards(deck, player_hand)
                 print(f'You draw {player_hand[-1][0]} of {player_hand[-1][1]}')  # You draw card.name of card.suite
             elif player_chose == 'S':
-                pass
+                game_round = False
             elif player_chose == 'D':
                 deck, player_hand = get_player_cards(deck, player_hand)
                 print(f'You draw {player_hand[-1][0]} of {player_hand[-1][1]}')
                 money -= bet
-
-            if dealer_score < 17:
-                deck, dealer_hand = get_dealer_cards(deck, dealer_hand)
+            if dealer_score < 17 and not first_round:
+                deck, dealer_hand = get_player_cards(deck, dealer_hand)
 
             dealer_score, player_score = get_game_score(dealer_hand, player_hand)
             result = check_score(dealer_score, player_score)
-            backside = True if result not in ('player_win', 'dealer_win') else False  # TODO исправить отображение карты
-            show_game_table(dealer_hand, dealer_score, player_hand, player_score, money, backside)
-            player_chose = choose_move(first_round)
-            first_round = False
-
-
-    # show_cards(player_hand, False)
+            if print_result(result):
+                backside = False
+                show_game_table(dealer_hand, dealer_score, player_hand, player_score, money, backside)
+                game_continue = want_to_continue()
+                break
+            else:
+                show_game_table(dealer_hand, dealer_score, player_hand, player_score, money, backside)
+                player_chose = choose_move(first_round)
+                first_round = False
 
 
 if __name__ == '__main__':

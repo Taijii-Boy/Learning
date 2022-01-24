@@ -1,32 +1,40 @@
-# This is a Guess the Number game.
+"""Guess the Number, by Al Sweigart al@inventwithpython.com
+Try to guess the secret number based on hints.
+This code is available at https://nostarch.com/big-book-small-python-programming
+Tags: tiny, beginner, game"""
+
 import random
 
-guessesTaken = 0
 
-print('Hello! What is your name?')
-myName = input()
+def askForGuess():
+    while True:
+        guess = input('> ')  # Enter the guess.
 
-number = random.randint(1, 20)
-print('Well, ' + myName + ', I am thinking of a number between 1 and 20.')
+        if guess.isdecimal():
+            return int(guess)  # Convert string guess to an integer.
+        print('Please enter a number between 1 and 100.')
 
-for guessesTaken in range(6):
-    print('Take a guess.') # Four spaces in front of "print".
-    guess = input()
-    guess = int(guess)
 
-    if guess < number:
-        print('Your guess is too low.') # Eight spaces in front of "print"
+print('Guess the Number, by Al Sweigart al@inventwithpython.com')
+print()
+secretNumber = random.randint(1, 100)  # Select a random number.
+print('I am thinking of a number between 1 and 100.')
 
-    if guess > number:
+for i in range(10):  # Give the player 10 guesses.
+    print('You have {} guesses left. Take a guess.'.format(10 - i))
+
+    guess = askForGuess()
+    if guess == secretNumber:
+        break  # Break out of the for loop if the guess is correct.
+
+    # Offer a hint:
+    if guess < secretNumber:
+        print('Your guess is too low.')
+    if guess > secretNumber:
         print('Your guess is too high.')
 
-    if guess == number:
-        break
-
-if guess == number:
-    guessesTaken = str(guessesTaken + 1)
-    print('Good job, ' + myName + '! You guessed my number in ' + guessesTaken + ' guesses!')
-
-if guess != number:
-    number = str(number)
-    print('Nope. The number I was thinking of was ' + number + '.')
+# Reveal the results:
+if guess == secretNumber:
+    print('Yay! You guessed my number!')
+else:
+    print('Game over. The number I was thinking of was', secretNumber)
