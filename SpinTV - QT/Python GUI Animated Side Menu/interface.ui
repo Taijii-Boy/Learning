@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>848</width>
-    <height>645</height>
+    <width>868</width>
+    <height>637</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,7 +16,9 @@
   <property name="styleSheet">
    <string notr="true">*{
 border: none;
-}</string>
+color: white;
+}
+</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="styleSheet">
@@ -42,7 +44,7 @@ border: none;
      <widget class="QFrame" name="slide_menu_container">
       <property name="maximumSize">
        <size>
-        <width>0</width>
+        <width>200</width>
         <height>16777215</height>
        </size>
       </property>
@@ -166,6 +168,21 @@ border: none;
              <enum>QFrame::Raised</enum>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_6">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
              <item>
               <widget class="QToolBox" name="toolBox">
                <property name="styleSheet">
@@ -183,15 +200,15 @@ text-align: left;
                 <enum>QFrame::NoFrame</enum>
                </property>
                <property name="currentIndex">
-                <number>1</number>
+                <number>0</number>
                </property>
                <widget class="QWidget" name="page">
                 <property name="geometry">
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>180</width>
-                  <height>507</height>
+                  <width>200</width>
+                  <height>517</height>
                  </rect>
                 </property>
                 <attribute name="icon">
@@ -290,8 +307,8 @@ text-align: left;
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>180</width>
-                  <height>507</height>
+                  <width>200</width>
+                  <height>525</height>
                  </rect>
                 </property>
                 <attribute name="icon">
