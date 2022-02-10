@@ -1,5 +1,3 @@
-from PyQt5 import uic
-from PyQt5.QtWidgets import QApplication
 from PyQt5 import QtCore, QtGui, QtWidgets
 from interface import *
 import sys
@@ -81,7 +79,7 @@ class MyWin(QtWidgets.QMainWindow):
         # Animate the transition
         self.animation = QtCore.QPropertyAnimation(self.ui.slide_menu_container,
                                                    b"maximumWidth")  # Animate minimumWidth
-        self.animation.setDuration(250)
+        self.animation.setDuration(100)
         self.animation.setStartValue(width)  # Start value is the current menu width
         self.animation.setEndValue(newWidth)  # end value is the new menu width
         self.animation.setEasingCurve(QtCore.QEasingCurve.InOutQuart)

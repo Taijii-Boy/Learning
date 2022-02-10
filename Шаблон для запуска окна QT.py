@@ -5,19 +5,6 @@ from interface import *
 
 import sys
 
-# ---------------------------------------------------------
-
-# Form, Window = uic.loadUiType("ui/PassManager2.ui")
-#
-# app = QApplication([])
-# window = Window()
-# form = Form()
-# form.setupUi(window)
-# window.show()
-# app.exec()
-
-# ---------------------------------------------------------
-
 
 class MyWin(QtWidgets.QMainWindow):
     """Главное окно приложения"""
