@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 
 
 class FlyBehavior(ABC):
-
     @abstractmethod
     def fly(self):
         pass
@@ -19,7 +18,6 @@ class FlyNoWay(FlyBehavior):
 
 
 class QuackBehavior(ABC):
-
     @abstractmethod
     def quack(self):
         pass
