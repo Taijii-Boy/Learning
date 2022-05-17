@@ -1,46 +1,63 @@
-# def summ(a, b):
-#     return a + b
-#
-#
-# def logger(func):
-#     def wrapper(*args):
-#         print(f'{func.__name__} started')
-#         result = func(*args)
-#         print(f'{func.__name__} end')
-#         return result
-#
-#     return wrapper
-
-def typed(type_):
-    def real_decorator(function):
-        def wrapped(*args):
-            for arg in args:
-                if not isinstance(arg, type_):
-                    raise ValueError(f'Тип должен быть {type_.__name__}')
-            return function(*args)
-        return wrapped
-    return real_decorator
+from abc import ABC, abstractmethod
 
 
-@typed(int)
-def calculate(a, b, c):
-    # Logic
-    return a + b + c
+class IPizzaBase(ABC):
+    """Интерфейс декорируемого объекта"""
+    @abstractmethod
+    def cost(self) -> float:
+        pass
 
 
-@typed(str)
-def convert(a, b):
-    # Logic
-    return a + b
+class PizzaBase(IPizzaBase):
+    """Декорируемый класс"""
+    def __init__(self, base_cost):
+        self.__cost = base_cost
+
+    def cost(self) -> float:
+        return self.__cost
+
+
+class IDecorator(IPizzaBase):
+    """Интерфейс декоратора"""
+
+    @abstractmethod
+    def name(self) -> str:
+        pass
+
+
+class PizzaMargarita(IDecorator):
+    """На основе PizzaBase получаем
+    пиццу Маргарита"""
+
+    def __init__(self, wrapped: IPizzaBase, cost: float):
+        self.__wrapped = wrapped
+        self.__cost = cost
+        self.__name = 'Маргарита'
+
+    def name(self) -> str:
+        return self.__name
+
+    def cost(self) -> float:
+        return self.__cost + self.__wrapped.cost()
+
+
+class PizzaSalami(IDecorator):
+    """На основе PizzaBase получаем
+    пиццу Салями"""
+
+    def __init__(self, wrapped: IPizzaBase, cost: float):
+        self.__wrapped = wrapped
+        self.__cost = cost
+        self.__name = 'Салями'
+
+    def name(self) -> str:
+        return self.__name
+
+    def cost(self) -> float:
+        return (self.__cost + self.__wrapped.cost())*2
 
 
 if __name__ == '__main__':
-    # # summ = logger(summ)
-    # # print(summ(2, 3))
-    #
-    # # print(logger(summ)(2, 3))
-    # wrapper = logger(summ)
-
-    # calculate = typed_int(calculate)
-    print(calculate(1, 2, 3))
-    print(convert('1', ' Biba'))
+    pizza_base = PizzaBase(3.5)
+    margarita = PizzaMargarita(pizza_base, 4)
+    print(f'Имя пиццы: {margarita.name()}\nСтоимость: {margarita.cost()}')

@@ -14,3 +14,5 @@ class Beverage(ABC):
 
 
 class CondimentDecorator(Beverage):
+    pass
+
