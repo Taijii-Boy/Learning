@@ -1,18 +1,9 @@
+def get_money():
+    money_summ = 0
+    for day_pay in range(1, 366):
+        money_summ += day_pay
+        print(day_pay)
+    return money_summ
 
+print(get_money())
 
-def names():
-    all_names = []
-
-    def inner(name: str) -> list:
-        all_names.append(name)
-        return all_names
-
-    return inner
-
-
-if __name__ == '__main__':
-    students = names()
-    print(students('Vasia'))
-    print(students('Dima'))
-    print(students('Kolya'))
-    print(students('Vova'))

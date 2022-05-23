@@ -1,7 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List
 
-from Factory import NYPizzaIngredientFactory, ChicagoIngredientFactory
 from Pizza import *
 
 
@@ -23,30 +21,40 @@ class PizzaStore(ABC):
 class NYPizzaStore(PizzaStore):
     def create_pizza(self, pizza_type: str) -> Pizza:
         if pizza_type == 'cheese':
-            pizza = NYStyleCheesePizza()
+            pizza = CheesePizza(NYPizzaIngredientFactory())
+            pizza.name = 'Нью-йоркская сырная пицца'
         elif pizza_type == 'clam':
-            pizza = NYStyleClamPizza()
+            pizza = ClamPizza(NYPizzaIngredientFactory())
+            pizza.name = 'Нью-йоркская пицца c мидиями'
         elif pizza_type == 'pepperoni':
-            pizza = NYStylePepperoniPizza()
+            pizza = PepperoniPizza(NYPizzaIngredientFactory())
+            pizza.name = 'Нью-йоркская пицца пепперони'
         elif pizza_type == 'veggie':
-            pizza = NYStyleVeggiePizza()
+            pizza = VeggiePizza(NYPizzaIngredientFactory())
+            pizza.name = 'Нью-йоркская вегетарианская пицца'
         else:
-            pizza = NYStyleCheesePizza()
+            pizza = CheesePizza(NYPizzaIngredientFactory())
+            pizza.name = 'Нью-йоркская сырная пицца'
         return pizza
 
 
 class ChicagoPizzaStore(PizzaStore):
     def create_pizza(self, pizza_type: str) -> Pizza:
         if pizza_type == 'cheese':
-            pizza = ChicagoCheesePizza()
+            pizza = CheesePizza(ChicagoIngredientFactory())
+            pizza.name = 'Чикагская сырная пицца'
         elif pizza_type == 'clam':
-            pizza = ChicagoClamPizza()
+            pizza = ClamPizza(ChicagoIngredientFactory())
+            pizza.name = 'Чикагская пицца c мидиями'
         elif pizza_type == 'pepperoni':
-            pizza = ChicagoPepperoniPizza()
+            pizza = PepperoniPizza(ChicagoIngredientFactory())
+            pizza.name = 'Чикагская пицца пепперони'
         elif pizza_type == 'veggie':
-            pizza = ChicagoVeggiePizza()
+            pizza = VeggiePizza(ChicagoIngredientFactory())
+            pizza.name = 'Чикагская вегетарианская пицца'
         else:
-            pizza = ChicagoCheesePizza()
+            pizza = CheesePizza(ChicagoIngredientFactory())
+            pizza.name = 'Чикагская сырная пицца'
         return pizza
 
 
