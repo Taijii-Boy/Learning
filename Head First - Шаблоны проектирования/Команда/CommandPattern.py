@@ -33,26 +33,38 @@ class RemoteControl:
     def __init__(self):
         self.on_commands = {}
         self.off_commands = {}
+        self.no_command = NoCommand()
+        self.undo_command = NoCommand()
 
-    def set_command(self, slot: int, on_command: Command, off_command: Command):
+        for i in range(7):
+            self.on_commands[i] = self.no_command
+            self.off_commands[i] = self.no_command
+
+    def set_command(self, slot: int, on_command, off_command):
         self.on_commands[slot] = on_command
         self.off_commands[slot] = off_command
 
     def on_button_was_pressed(self, slot: int):
         self.on_commands[slot].execute()
+        self.undo_command = self.on_commands[slot]
 
     def off_button_was_pressed(self, slot: int):
         self.off_commands[slot].execute()
+        self.undo_command = self.off_commands[slot]
+
+    def undo_button_was_pushed(self):
+        self.undo_command.undo()
 
     def to_string(self) -> list:
         string_buffer = []
         string_buffer.append('\n-------Remote Control -------')
         for slot in range(7):
-            try:
-                string_buffer.append(f'[slot {slot}] {self.on_commands[slot].name} -- {self.off_commands[slot].name}')
-            except:
-                string_buffer.append(f'[slot {slot}] Слот пустой')
-        string_buffer.append('-'*30)
+            on_command_text = f'[slot {slot}] {self.on_commands[slot].__class__.__name__} -- '
+            off_command_text = f'{self.off_commands[slot].__class__.__name__}'
+            string_buffer.append(on_command_text + off_command_text)
+
+        string_buffer.append(f'[undo] {self.undo_command.__class__.__name__}')
+        string_buffer.append('-' * 30)
         return string_buffer
 
 
@@ -93,6 +105,7 @@ class RemoteLoader:
         remote.off_button_was_pressed(0)
         remote.on_button_was_pressed(1)
         remote.off_button_was_pressed(1)
+        remote.undo_button_was_pushed()
         remote.on_button_was_pressed(2)
         remote.off_button_was_pressed(2)
         remote.on_button_was_pressed(3)

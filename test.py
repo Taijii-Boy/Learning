@@ -1,4 +1,5 @@
-diction = {}
-diction[0] = 1
+class Person:
+    pass
 
-print(diction[0])
+p = Person()
+print(Person.__name__)
