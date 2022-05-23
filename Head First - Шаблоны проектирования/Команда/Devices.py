@@ -8,8 +8,8 @@ class Device(ABC):
 
 
 class Light(Device):
-    def __init__(self):
-        self.name = 'Светильник'
+    def __init__(self, name='Светильник'):
+        self.name = name
 
     def on(self):
         print(f'{self.name} включен')
@@ -19,8 +19,8 @@ class Light(Device):
 
 
 class GarageDoor(Device):
-    def __init__(self):
-        self.name = 'Гаражная дверь'
+    def __init__(self, name='Гаражная дверь'):
+        self.name = name
 
     def up(self):
         print(f'{self.name} открывается')
@@ -39,8 +39,8 @@ class GarageDoor(Device):
 
 
 class ApplianceControl(Device):
-    def __init__(self):
-        self.name = 'Электрические приборы'
+    def __init__(self, name='Электрические приборы'):
+        self.name = name
 
     def on(self):
         print(f'{self.name} включились')
@@ -50,8 +50,8 @@ class ApplianceControl(Device):
 
 
 class Stereo(Device):
-    def __init__(self):
-        self.name = 'Стереосистема'
+    def __init__(self, name ='Стереосистема'):
+        self.name = name
 
     def on(self):
         print(f'{self.name} включилась')
@@ -60,21 +60,21 @@ class Stereo(Device):
         print(f'{self.name} отключилась')
 
     def set_cd(self):
-        pass
+        print(f'устанавливаем CD')
 
     def set_dvd(self):
-        pass
+        print(f'устанавливаем DVD')
 
-    def set_radio(self):
-        pass
+    def set_radio(self, value):
+        print(f'включаем радио {value}')
 
-    def set_volume(self):
-        pass
+    def set_volume(self, value):
+        print(f'устанавливаем громкость на {value}')
 
 
 class FaucetControl(Device):
-    def __init__(self):
-        self.name = 'Кран'
+    def __init__(self, name='Кран'):
+        self.name = name
 
     def open_value(self):
         print(f'{self.name} включен')
@@ -84,8 +84,8 @@ class FaucetControl(Device):
 
 
 class Hottub(Device):
-    def __init__(self):
-        self.name = 'Джакузи'
+    def __init__(self, name='Джакузи'):
+        self.name = name
 
     def jets_on(self):
         print(f'{self.name} включено')
@@ -101,16 +101,16 @@ class Hottub(Device):
 
 
 class Termostate(Device):
-    def __init__(self):
-        self.name = 'Термостат'
+    def __init__(self, name='Термостат'):
+        self.name = name
 
     def set_temperature(self):
         print(f'{self.name}: устанавливается температура')
 
 
 class SecurityControl(Device):
-    def __init__(self):
-        self.name = 'Охранная система'
+    def __init__(self, name='Охранная система'):
+        self.name = name
 
     def arm(self):
         print(f'{self.name} включена')
@@ -120,8 +120,8 @@ class SecurityControl(Device):
 
 
 class TV(Device):
-    def __init__(self):
-        self.name = 'Телевизор'
+    def __init__(self, name='Телевизор'):
+        self.name = name
 
     def on(self):
         print(f'{self.name} включен')
@@ -137,8 +137,8 @@ class TV(Device):
 
 
 class CeilingLight(Device):
-    def __init__(self):
-        self.name = 'Потолочный светильник'
+    def __init__(self, name='Потолочный светильник'):
+        self.name = name
 
     def on(self):
         print(f'{self.name} включен')
@@ -151,8 +151,8 @@ class CeilingLight(Device):
 
 
 class CeilingFan(Device):
-    def __init__(self):
-        self.name = 'Потолочный вентилятор'
+    def __init__(self, name='Потолочный вентилятор'):
+        self.name = name
 
     def high(self):
         print(f'{self.name} включен на полную')
@@ -171,8 +171,8 @@ class CeilingFan(Device):
 
 
 class Sprinkler(Device):
-    def __init__(self):
-        self.name = 'Поливалка'
+    def __init__(self, name='Поливалка'):
+        self.name = name
 
     def water_on(self):
         print(f'{self.name} включена')
@@ -182,8 +182,8 @@ class Sprinkler(Device):
 
 
 class OutdoorLight(Device):
-    def __init__(self):
-        self.name = 'Наружный светильник'
+    def __init__(self, name='Наружный светильник'):
+        self.name = name
 
     def on(self):
         print(f'{self.name} включен')
@@ -193,8 +193,8 @@ class OutdoorLight(Device):
 
 
 class GardenLight(Device):
-    def __init__(self):
-        self.name = 'Садовый светильник '
+    def __init__(self, name='Садовый светильник'):
+        self.name = name
 
     def manual_on(self):
         print(f'{self.name} включен')
