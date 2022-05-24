@@ -1,4 +1,5 @@
 from Devices import *
+from typing import Optional
 
 
 class Command(ABC):
@@ -56,48 +57,69 @@ class GarageDoorCloseCommand(Command):
         self.door.up()
 
 
+class ChangeParameters:
+    @staticmethod
+    def change_speed_fan(fan: CeilingFan, command: Optional):
+        if command.prev_speed == fan.speed.HIGH:
+            fan.high()
+        elif command.prev_speed == fan.speed.MEDIUM:
+            fan.medium()
+        elif command.prev_speed == fan.speed.LOW:
+            fan.low()
+        elif command.prev_speed == fan.speed.OFF:
+            fan.off()
+
+
 class CeilingFanHighCommand(Command):
     def __init__(self, fan: CeilingFan):
         self.fan = fan
+        self.prev_speed = Speed.OFF
 
     def execute(self):
+        self.prev_speed = self.fan.get_speed()
         self.fan.high()
 
     def undo(self):
-        self.fan.off()
+        ChangeParameters.change_speed_fan(self.fan, self)
 
 
 class CeilingFanMediumCommand(Command):
     def __init__(self, fan: CeilingFan):
         self.fan = fan
+        self.prev_speed = Speed.OFF
 
     def execute(self):
+        self.prev_speed = self.fan.get_speed()
         self.fan.medium()
 
     def undo(self):
-        self.fan.off()
+        ChangeParameters.change_speed_fan(self.fan, self)
 
 
 class CeilingFanLowCommand(Command):
     def __init__(self, fan: CeilingFan):
         self.fan = fan
+        self.prev_speed = Speed.OFF
 
     def execute(self):
+        self.prev_speed = self.fan.get_speed()
         self.fan.low()
 
     def undo(self):
-        self.fan.off()
+        ChangeParameters.change_speed_fan(self.fan, self)
 
 
 class CeilingFanOffCommand(Command):
     def __init__(self, fan: CeilingFan):
         self.fan = fan
+        self.prev_speed = Speed.OFF
 
     def execute(self):
+        self.prev_speed = self.fan.get_speed()
         self.fan.off()
 
     def undo(self):
-        self.fan.high()
+        ChangeParameters.change_speed_fan(self.fan, self)
 
 
 class ApplianceControlOnCommand(Command):

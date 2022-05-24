@@ -72,24 +72,22 @@ class RemoteControl:
 class RemoteLoader:
     def main(self):
         remote_control = RemoteControl()
-        living_room_light = Light('Светильник в гостиной')
+        fan = CeilingFan()
+        fan_high = CeilingFanHighCommand(fan)
+        fan_medium = CeilingFanMediumCommand(fan)
+        fan_off = CeilingFanOffCommand(fan)
 
-        living_room_light_on = LightOnCommand(living_room_light)
-        living_room_light_off = LightOffCommand(living_room_light)
-
-        remote_control.set_command(0, living_room_light_on, living_room_light_off)
+        remote_control.set_command(0, fan_medium, fan_off)
+        remote_control.set_command(1, fan_high, fan_off)
 
         remote_control.on_button_was_pressed(0)
         remote_control.off_button_was_pressed(0)
 
         self.print_slots_information(remote_control)
-
         remote_control.undo_button_was_pushed()
-        remote_control.off_button_was_pressed(0)
-        remote_control.on_button_was_pressed(0)
 
+        remote_control.on_button_was_pressed(1)
         self.print_slots_information(remote_control)
-
         remote_control.undo_button_was_pushed()
 
     @staticmethod
