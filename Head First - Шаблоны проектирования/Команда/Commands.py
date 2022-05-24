@@ -1,4 +1,5 @@
 from Devices import *
+from typing import Optional, List
 
 
 class Command(ABC):
@@ -56,48 +57,69 @@ class GarageDoorCloseCommand(Command):
         self.door.up()
 
 
+class ChangeParameters:
+    @staticmethod
+    def change_speed_fan(fan: CeilingFan, command: Optional):
+        if command.prev_speed == fan.speed.HIGH:
+            fan.high()
+        elif command.prev_speed == fan.speed.MEDIUM:
+            fan.medium()
+        elif command.prev_speed == fan.speed.LOW:
+            fan.low()
+        elif command.prev_speed == fan.speed.OFF:
+            fan.off()
+
+
 class CeilingFanHighCommand(Command):
     def __init__(self, fan: CeilingFan):
         self.fan = fan
+        self.prev_speed = Speed.OFF
 
     def execute(self):
+        self.prev_speed = self.fan.get_speed()
         self.fan.high()
 
     def undo(self):
-        pass
+        ChangeParameters.change_speed_fan(self.fan, self)
 
 
 class CeilingFanMediumCommand(Command):
     def __init__(self, fan: CeilingFan):
         self.fan = fan
+        self.prev_speed = Speed.OFF
 
     def execute(self):
+        self.prev_speed = self.fan.get_speed()
         self.fan.medium()
 
     def undo(self):
-        pass
+        ChangeParameters.change_speed_fan(self.fan, self)
 
 
 class CeilingFanLowCommand(Command):
     def __init__(self, fan: CeilingFan):
         self.fan = fan
+        self.prev_speed = Speed.OFF
 
     def execute(self):
+        self.prev_speed = self.fan.get_speed()
         self.fan.low()
 
     def undo(self):
-        pass
+        ChangeParameters.change_speed_fan(self.fan, self)
 
 
 class CeilingFanOffCommand(Command):
     def __init__(self, fan: CeilingFan):
         self.fan = fan
+        self.prev_speed = Speed.OFF
 
     def execute(self):
+        self.prev_speed = self.fan.get_speed()
         self.fan.off()
 
     def undo(self):
-        pass
+        ChangeParameters.change_speed_fan(self.fan, self)
 
 
 class ApplianceControlOnCommand(Command):
@@ -132,7 +154,7 @@ class StereoOnWithCDCommand(Command):
         self.stereo.set_volume(11)
 
     def undo(self):
-        pass
+        self.stereo.off()
 
 
 class StereoOnWithDVDCommand(Command):
@@ -145,7 +167,7 @@ class StereoOnWithDVDCommand(Command):
         self.stereo.set_volume(11)
 
     def undo(self):
-        pass
+        self.stereo.off()
 
 
 class StereoOffCommand(Command):
@@ -192,7 +214,7 @@ class HottubOnCommand(Command):
         self.hottub.jets_off()
 
 
-class HottubOfCommand(Command):
+class HottubOffCommand(Command):
     def __init__(self, hottub: Hottub):
         self.hottub = hottub
 
@@ -288,7 +310,7 @@ class CeilingLightDimCommand(Command):
         self.light.dim()
 
     def undo(self):
-        pass
+        self.light.off()
 
 
 class SprinklerOnCommand(Command):
@@ -363,3 +385,16 @@ class NoCommand(Command):
 
     def undo(self):
         pass
+
+
+class MacroCommand(Command):
+    def __init__(self, commands: List[Command]):
+        self.commands = commands
+
+    def execute(self):
+        for command in self.commands:
+            command.execute()
+
+    def undo(self):
+        for command in self.commands:
+            command.undo()

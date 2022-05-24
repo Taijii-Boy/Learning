@@ -1,4 +1,12 @@
 from abc import ABC, abstractmethod
+from enum import Enum
+
+
+class Speed(Enum):
+    HIGH = 3
+    MEDIUM = 2
+    LOW = 1
+    OFF = 0
 
 
 class Device(ABC):
@@ -50,7 +58,7 @@ class ApplianceControl(Device):
 
 
 class Stereo(Device):
-    def __init__(self, name ='Стереосистема'):
+    def __init__(self, name='Стереосистема'):
         self.name = name
 
     def on(self):
@@ -151,23 +159,29 @@ class CeilingLight(Device):
 
 
 class CeilingFan(Device):
+
     def __init__(self, name='Потолочный вентилятор'):
         self.name = name
+        self.speed = Speed.OFF
 
     def high(self):
-        print(f'{self.name} включен на полную')
+        self.speed = Speed.HIGH
+        print(f'{self.name} включен на высокой скорости')
 
     def medium(self):
+        self.speed = Speed.MEDIUM
         print(f'{self.name} включен на средней мощности')
 
     def low(self):
+        self.speed = Speed.LOW
         print(f'{self.name} включен на малой мощности')
 
     def off(self):
+        self.speed = Speed.OFF
         print(f'{self.name} выключен')
 
     def get_speed(self):
-        pass
+        return self.speed
 
 
 class Sprinkler(Device):

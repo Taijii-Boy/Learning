@@ -36,11 +36,11 @@ class RemoteControl:
         self.no_command = NoCommand()
         self.undo_command = NoCommand()
 
-        for i in range(7):
-            self.on_commands[i] = self.no_command
-            self.off_commands[i] = self.no_command
+        for slot in range(7):
+            self.on_commands[slot] = self.no_command
+            self.off_commands[slot] = self.no_command
 
-    def set_command(self, slot: int, on_command, off_command):
+    def set_command(self, slot: int, on_command: Command, off_command: Command):
         self.on_commands[slot] = on_command
         self.off_commands[slot] = off_command
 
@@ -58,6 +58,7 @@ class RemoteControl:
     def to_string(self) -> list:
         string_buffer = []
         string_buffer.append('\n-------Remote Control -------')
+
         for slot in range(7):
             on_command_text = f'[slot {slot}] {self.on_commands[slot].__class__.__name__} -- '
             off_command_text = f'{self.off_commands[slot].__class__.__name__}'
@@ -70,48 +71,42 @@ class RemoteControl:
 
 class RemoteLoader:
     def main(self):
-        remote = RemoteControl()
-        living_room_light = Light('Светильник в гостиной')
-        kitchen_light = Light('Светильник на кухне')
-        ceiling_fun = CeilingFan('Вентилятор в гостиной')
-        garage_door = GarageDoor()
-        stereo = Stereo('Стерео система в гостиной')
+        remote_control = RemoteControl()
+        light = Light('Светильник в гостиной')
+        tv = TV('ТВ в гостиной')
+        stereo = Stereo('Стерео в гостиной')
+        hottub = Hottub()
 
-        living_room_light_on = LightOnCommand(living_room_light)
-        living_room_light_off = LightOffCommand(living_room_light)
-        kitchen_light_on = LightOnCommand(kitchen_light)
-        kitchen_light_off = LightOffCommand(kitchen_light)
+        light_on_command = LightOnCommand(light)
+        tv_on_command = TVOnCommand(tv)
+        stereo_on_command = StereoOnWithCDCommand(stereo)
+        hottub_on_command = HottubOnCommand(hottub)
 
-        ceiling_fun_on = CeilingFanHighCommand(ceiling_fun)
-        ceiling_fun_off = CeilingFanOffCommand(ceiling_fun)
+        light_off_command = LightOffCommand(light)
+        tv_off_command = TVOffCommand(tv)
+        stereo_off_command = StereoOffCommand(stereo)
+        hottub_off_command = HottubOffCommand(hottub)
 
-        garage_door_up = GarageDoorOpenCommand(garage_door)
-        garage_door_down = GarageDoorCloseCommand(garage_door)
+        party_on = [light_on_command, tv_on_command, stereo_on_command, hottub_on_command]
+        party_off = [light_off_command, tv_off_command, stereo_off_command, hottub_off_command]
 
-        stereo_on_with_cd = StereoOnWithCDCommand(stereo)
-        stereo_off = StereoOffCommand(stereo)
+        party_on_macro = MacroCommand(party_on)
+        party_off_macro = MacroCommand(party_off)
 
-        remote.set_command(0, living_room_light_on, living_room_light_off)
-        remote.set_command(1, kitchen_light_on, kitchen_light_off)
-        remote.set_command(2, ceiling_fun_on, ceiling_fun_off)
-        remote.set_command(3, garage_door_up, garage_door_down)
-        remote.set_command(4, stereo_on_with_cd, stereo_off)
+        remote_control.set_command(0, party_on_macro, party_off_macro)
 
+        self.print_slots_information(remote_control)
+        print('-------Party on!!!!------')
+        remote_control.on_button_was_pressed(0)
+        print('-------Party off!!!!------')
+        remote_control.off_button_was_pressed(0)
+
+
+    @staticmethod
+    def print_slots_information(remote):
         slots_information = remote.to_string()
         for slot in slots_information:
             print(slot)
-
-        remote.on_button_was_pressed(0)
-        remote.off_button_was_pressed(0)
-        remote.on_button_was_pressed(1)
-        remote.off_button_was_pressed(1)
-        remote.undo_button_was_pushed()
-        remote.on_button_was_pressed(2)
-        remote.off_button_was_pressed(2)
-        remote.on_button_was_pressed(3)
-        remote.off_button_was_pressed(3)
-        remote.on_button_was_pressed(4)
-        remote.off_button_was_pressed(4)
 
 
 if __name__ == '__main__':
