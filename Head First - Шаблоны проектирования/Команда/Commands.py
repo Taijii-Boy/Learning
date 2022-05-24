@@ -1,5 +1,5 @@
 from Devices import *
-from typing import Optional
+from typing import Optional, List
 
 
 class Command(ABC):
@@ -214,7 +214,7 @@ class HottubOnCommand(Command):
         self.hottub.jets_off()
 
 
-class HottubOfCommand(Command):
+class HottubOffCommand(Command):
     def __init__(self, hottub: Hottub):
         self.hottub = hottub
 
@@ -385,3 +385,16 @@ class NoCommand(Command):
 
     def undo(self):
         pass
+
+
+class MacroCommand(Command):
+    def __init__(self, commands: List[Command]):
+        self.commands = commands
+
+    def execute(self):
+        for command in self.commands:
+            command.execute()
+
+    def undo(self):
+        for command in self.commands:
+            command.undo()

@@ -72,23 +72,35 @@ class RemoteControl:
 class RemoteLoader:
     def main(self):
         remote_control = RemoteControl()
-        fan = CeilingFan()
-        fan_high = CeilingFanHighCommand(fan)
-        fan_medium = CeilingFanMediumCommand(fan)
-        fan_off = CeilingFanOffCommand(fan)
+        light = Light('Светильник в гостиной')
+        tv = TV('ТВ в гостиной')
+        stereo = Stereo('Стерео в гостиной')
+        hottub = Hottub()
 
-        remote_control.set_command(0, fan_medium, fan_off)
-        remote_control.set_command(1, fan_high, fan_off)
+        light_on_command = LightOnCommand(light)
+        tv_on_command = TVOnCommand(tv)
+        stereo_on_command = StereoOnWithCDCommand(stereo)
+        hottub_on_command = HottubOnCommand(hottub)
 
+        light_off_command = LightOffCommand(light)
+        tv_off_command = TVOffCommand(tv)
+        stereo_off_command = StereoOffCommand(stereo)
+        hottub_off_command = HottubOffCommand(hottub)
+
+        party_on = [light_on_command, tv_on_command, stereo_on_command, hottub_on_command]
+        party_off = [light_off_command, tv_off_command, stereo_off_command, hottub_off_command]
+
+        party_on_macro = MacroCommand(party_on)
+        party_off_macro = MacroCommand(party_off)
+
+        remote_control.set_command(0, party_on_macro, party_off_macro)
+
+        self.print_slots_information(remote_control)
+        print('-------Party on!!!!------')
         remote_control.on_button_was_pressed(0)
+        print('-------Party off!!!!------')
         remote_control.off_button_was_pressed(0)
 
-        self.print_slots_information(remote_control)
-        remote_control.undo_button_was_pushed()
-
-        remote_control.on_button_was_pressed(1)
-        self.print_slots_information(remote_control)
-        remote_control.undo_button_was_pushed()
 
     @staticmethod
     def print_slots_information(remote):
